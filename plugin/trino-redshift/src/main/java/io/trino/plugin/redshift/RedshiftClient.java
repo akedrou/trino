@@ -13,6 +13,7 @@
  */
 package io.trino.plugin.redshift;
 
+import com.google.common.collect.ImmutableList;
 import io.trino.plugin.jdbc.BaseJdbcClient;
 import io.trino.plugin.jdbc.BaseJdbcConfig;
 import io.trino.plugin.jdbc.ColumnMapping;
@@ -39,6 +40,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
@@ -93,6 +95,12 @@ public class RedshiftClient
     public RedshiftClient(BaseJdbcConfig config, ConnectionFactory connectionFactory, QueryBuilder queryBuilder, IdentifierMapping identifierMapping)
     {
         super(config, "\"", connectionFactory, queryBuilder, identifierMapping);
+    }
+
+    @Override
+    protected Optional<List<String>> getTableTypes()
+    {
+        return Optional.of(ImmutableList.of("TABLE", "VIEW", "EXTERNAL TABLE", "EXTERNAL VIEW"));
     }
 
     @Override
